@@ -41,7 +41,7 @@
 #include "sensor_msgs/JointState.h"
 #include "simple_message/message_handler.h"
 #include "simple_message/messages/joint_message.h"
-
+#include "trajectory_msgs/JointTrajectoryPoint.h"
 
 namespace industrial_robot_client
 {
@@ -50,6 +50,7 @@ namespace joint_relay_handler
 
 using industrial::joint_message::JointMessage;
 using industrial::simple_message::SimpleMessage;
+using trajectory_msgs::JointTrajectoryPoint;
 
 /**
  * \brief Message handler that relays joint positions (converts simple message
@@ -82,6 +83,7 @@ public:
   * \return true on success, false otherwise (an invalid message type)
   */
  bool init(industrial::smpl_msg_connection::SmplMsgConnection* connection, std::vector<std::string> &joint_names);
+ bool init(industrial::smpl_msg_connection::SmplMsgConnection* connection, int msg_type, std::vector<std::string> &joint_names);
 
 protected:
 
@@ -104,6 +106,18 @@ protected:
                                control_msgs::FollowJointTrajectoryFeedback* control_state,
                                sensor_msgs::JointState* sensor_state);
 
+
+  virtual bool create_messages(SimpleMessage& msg_in,
+                               control_msgs::FollowJointTrajectoryFeedback* control_state,
+                               sensor_msgs::JointState* sensor_state);
+  /**
+   * \brief Convert joint message into intermediate message-type
+   *
+   * \param[in] msg_in Message from robot connection
+   * \param[out] joint_state JointTrajectoryPt message for intermediate processing
+   */
+  virtual bool convert_message(SimpleMessage& msg_in, JointTrajectoryPoint* joint_state);
+
   /**
    * \brief Transform joint positions before publishing.
    * Can be overridden to implement, e.g. robot-specific joint coupling.
@@ -116,6 +130,21 @@ protected:
   virtual bool transform(const std::vector<double>& pos_in, std::vector<double>* pos_out)
   {
     *pos_out = pos_in;  // by default, no transform is applied
+    return true;
+  }
+
+    /**
+   * \brief Transform joint state before publishing.
+   * Can be overridden to implement, e.g. robot-specific joint coupling.
+   *
+   * \param[in] state_in joint state, exactly as passed from robot connection.
+   * \param[out] state_out transformed joint state (in same order/count as input state)
+   *
+   * \return true on success, false otherwise
+   */
+  virtual bool transform(const JointTrajectoryPoint& state_in, JointTrajectoryPoint* state_out)
+  {
+    *state_out = state_in;  // by default, no transform is applied
     return true;
   }
 
@@ -132,6 +161,9 @@ protected:
   virtual bool select(const std::vector<double>& all_joint_pos, const std::vector<std::string>& all_joint_names,
                       std::vector<double>* pub_joint_pos, std::vector<std::string>* pub_joint_names);
 
+  virtual bool select(const JointTrajectoryPoint& all_joint_state, const std::vector<std::string>& all_joint_names,
+                               JointTrajectoryPoint* pub_joint_state, std::vector<std::string>* pub_joint_names);
+
   /**
    * \brief Callback executed upon receiving a joint message
    *
@@ -142,6 +174,15 @@ protected:
   bool internalCB(JointMessage& in);
 
 private:
+
+  /**
+   * \brief Convert joint message into intermediate message-type
+   *
+   * \param[in] msg_in JointMessage from robot connection
+   * \param[out] joint_state JointTrajectoryPt message for intermediate processing
+   */
+  bool convert_message(JointMessage& msg_in, JointTrajectoryPoint* joint_state);
+
  /**
   * \brief Callback executed upon receiving a message
   *
