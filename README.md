@@ -17,3 +17,6 @@ Older releases may be found in the old ROS-Industrial [subversion repository][].
 [ROS-Industrial]: http://wiki.ros.org/Industrial
 [ROS wiki]: http://wiki.ros.org/industrial_core
 [subversion repository]: https://github.com/ros-industrial/swri-ros-pkg
+
+
+For this repository, `git checkout master` see the changes and moveit_pkg configuration...
