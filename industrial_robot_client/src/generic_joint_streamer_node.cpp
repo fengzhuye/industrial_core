@@ -29,9 +29,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "industrial_robot_client/joint_trajectory_streamer.h"
+//#include "industrial_robot_client/joint_trajectory_streamer.h"
+#include "industrial_robot_client/joint_trajectory_pt_full_streamer.h"
 
-using industrial_robot_client::joint_trajectory_streamer::JointTrajectoryStreamer;
+//using industrial_robot_client::joint_trajectory_streamer::JointTrajectoryStreamer;
+using industrial_robot_client::joint_trajectory_streamer::JointTrajectoryPtFullStreamer;
 
 int main(int argc, char** argv)
 {
@@ -39,7 +41,8 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "motion_interface");
 
   // launch the default JointTrajectoryStreamer connection/handlers
-  JointTrajectoryStreamer motionInterface;
+//  JointTrajectoryStreamer motionInterface;
+  JointTrajectoryPtFullStreamer motionInterface;
   motionInterface.init();
   motionInterface.run();
 

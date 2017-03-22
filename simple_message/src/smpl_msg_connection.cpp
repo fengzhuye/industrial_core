@@ -84,7 +84,6 @@ bool SmplMsgConnection::receiveMsg(SimpleMessage & message)
 
   bool rtn = false;
 
-
   rtn = this->receiveBytes(lengthBuffer, message.getLengthSize());
 
   if (rtn)

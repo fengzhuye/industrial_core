@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: industrial_robot_client
+    relative_path: launch/er3.urdf
+  SRDF:
+    relative_path: config/er3.srdf
+  CONFIG:
+    author_name: guowei
+    author_email: guowei@i5cnc.com
+    generated_timestamp: 1488512467

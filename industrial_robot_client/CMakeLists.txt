@@ -17,6 +17,7 @@ set(SRC_FILES src/joint_relay_handler.cpp
               src/joint_feedback_relay_handler.cpp
               src/joint_trajectory_downloader.cpp
               src/joint_trajectory_streamer.cpp
+              src/joint_trajectory_pt_full_streamer.cpp
               src/joint_trajectory_interface.cpp
               src/robot_state_interface.cpp
               src/utils.cpp)
