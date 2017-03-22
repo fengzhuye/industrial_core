@@ -1,0 +1,32 @@
+loadComponent("joints_scanner","CORBA")
+loadComponent("robot_trajectory","CORBA")
+import("rtt_ros")
+
+
+ros.import ("rtt_roscomm")
+ros.import ("rtt_std_msgs")
+ros.import ("rtt_std_srvs")
+ros.import ("rtt_sensor_msgs")
+ros.import("rtt_i5_msgs")
+ros.import("rtt_i5_srvs")
+ros.import("trajectory_proxy")
+ros.import("joints_state_proxy")
+loadComponent("trajectory","TrajectoryProxy")
+loadComponent("joints_state","JointsStateProxy")
+connectPeers("robot_trajectory","trajectory")
+
+
+trajectory.configure
+loadService("trajectory","rosservice")
+trajectory.rosservice.connect("addSegment","/er3/add_segment","i5_srvs/AddSegment")
+
+var ConnPolicy p
+p.data_size  = 1
+connect("joints_scanner.out_position","joints_state.in_pose",p)
+connect("joints_scanner.out_velocity","joints_state.in_vel",p)
+
+joints_state.setPeriod(0.05)
+
+stream("joints_state.out_joints_state", ros.topic("/joint_states"))
+joints_state.start
+

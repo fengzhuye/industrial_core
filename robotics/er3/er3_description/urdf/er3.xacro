@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="er3">
+
+
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="base_radius" value="0.07" />
+  <xacro:property name="joint_offset_base" value="0.0" /> 
+  
+  <xacro:property name="radius1" value="0.07" /> <!-- Link 1 -->
+  <xacro:property name="height1" value="0.12" />
+  <xacro:property name="joint_offset_1" value="0.0" />
+  <xacro:property name="j2l_offset1" value="0.0" />
+  
+  <xacro:property name="length2" value="0.08" />
+  <xacro:property name="width2" value="0.14" />  
+  <xacro:property name="height2" value="0.12" /> <!-- Link 2 -->
+  <xacro:property name="joint_offset_2_x" value="0.050" />
+  <xacro:property name="joint_offset_2_z" value="0.3215" />
+  <xacro:property name="j2l_offset2" value="0.12" />
+  
+  <xacro:property name="length3" value="0.10" />
+  <xacro:property name="width3" value="0.10" />  
+  <xacro:property name="height3" value="0.15" /> <!-- Link 2 -->
+  <xacro:property name="joint_offset_3" value="0.270" />
+  <xacro:property name="j2l_offset3" value="0.0" />
+  
+  <xacro:property name="radius4" value="0.05" />
+  <xacro:property name="height4" value="0.17" /> <!-- Link 2 -->
+  <xacro:property name="joint_offset_4_y" value="0.299" />  
+  <xacro:property name="joint_offset_4_x" value="0.070" />  	
+  <xacro:property name="j2l_offset4" value="0.135" />
+  
+  <xacro:property name="radius5" value="0.05" />
+  <xacro:property name="height5" value="0.1" /> <!-- Link 2 -->
+  <xacro:property name="joint_offset_5" value="0.0" />
+  <xacro:property name="j2l_offset5" value="0.12" />
+  
+  <xacro:property name="radius6" value="0.03" />   
+  <xacro:property name="height6" value="0.08" /> <!-- Link 6 -->
+  <xacro:property name="joint_offset_6" value="0.0" />
+  <xacro:property name="j2l_offset6" value="0.09" />
+  
+  <xacro:property name="width_tool" value="0.03" />
+  <xacro:property name="length_tool" value="0.03" />
+  <xacro:property name="height_tool" value="0.08" />   
+  <xacro:property name="joint_offset_tool" value="0.16" />
+  
+  <xacro:property name="width_end" value="0.03" />
+  <xacro:property name="length_end" value="0.03" />
+  <xacro:property name="height_end" value="0.03" />   
+  <xacro:property name="joint_offset_end" value="0.04" />
+  
+  <xacro:property name="height7" value="0.1" /> <!-- Link 7 -->
+  <xacro:property name="eef_height1" value="0.1" /> <!-- Link eef -->
+  <xacro:property name="camera_height" value="0.05" /> <!-- Link camera -->
+  <xacro:property name="camera_width" value="0.05" /> <!-- Link camera -->
+  <xacro:property name="axel_offset" value="0.05" /> <!-- Space btw top of beam and the each joint -->
+#  <xacro:property name="mesh_dir" value="/home/i5/" />
+  <!-- Import Rviz colors -->
+
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  
+  <link name="world"/>
+
+
+  
+  <link name="camera_link">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+
+    <visual>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <joint name="joint_camera" type="fixed">
+    <parent link="world"/>
+    <child link="camera_link"/>
+    <axis xyz="1 0 0"/>
+    <origin xyz="-0.4 0 0.4" rpy="0 0 0"/>
+  </joint>
+  
+  <joint name="joint_base" type="fixed">
+    <parent link="world"/>
+    <child link="link_base"/>
+    <origin xyz="0 0 ${joint_offset_base}" rpy="0 0 0"/>
+  </joint>
+  
+    <!-- Link base-->
+  <link name="link_base">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+
+    <visual>
+      <origin rpy="0.0 0 0" xyz="-0.02488 0.020461 -0.18407"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/base.dae"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="joint_1" type="revolute">
+    <parent link="link_base"/>
+    <child link="link_1"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 ${joint_offset_1}" rpy="0 0 0"/>
+    <dynamics damping="0.7"/>
+    <limit lower="-2.9147" upper="2.9147" effort="1000.0" velocity="0.1"/>
+  </joint>
+
+  <!-- Link 1-->
+  <link name="link_1">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0.0 0 0" xyz="-0.02488 0.020461 -0.18407"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/1_axis.dae"/>
+      </geometry>      
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 ${j2l_offset1}" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 2-->
+  <joint name="joint_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="${joint_offset_2_x} 0 ${joint_offset_2_z}" rpy="${-PI/2.0} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+    <limit lower="-2.2689" upper="1.5707963267948966192313216916398" effort="1000.0" velocity="0.1"/>
+  </joint>
+
+  <!-- Link 2-->
+  <link name="link_2">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision> 
+
+    <visual>
+      <origin rpy="1.57079632679 0 0" xyz="-0.07351 0.50557 0.019211"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/2_axis.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 ${-j2l_offset2} 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+  
+
+  
+  <!-- Joint 3-->
+  <joint name="joint_3" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <origin xyz="0 ${-joint_offset_3} 0" rpy="0 0 ${-PI/2.0}"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+    <limit lower="-1.3090" upper="1.832595714594046055769875306913" effort="1000.0" velocity="0.1"/>
+  </joint>
+  
+  <!-- Link 3-->
+  <link name="link_3">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="1.57079632679 0 1.57079632679" xyz="-0.77346 -0.054782 0.014961"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/3_axis.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <!-- Joint 4-->
+  <joint name="joint_4" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <origin xyz="${joint_offset_4_x} ${joint_offset_4_y} 0" rpy="${PI/2.0} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+    <limit lower="-3.1415926535897932384626433832795" upper="3.1415926535897932384626433832795" effort="1000.0" velocity="0.1"/>
+  </joint>
+  
+  <!-- Link 4-->
+  <link name="link_4">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0.0 1.5708 0" xyz="-0.870 0.034255 0.473982"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/4_axis.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0 ${j2l_offset4}" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <!-- Joint 5-->
+  <joint name="joint_5" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+    <origin xyz="0 0 ${joint_offset_5}" rpy="${PI/2.0} 0 0"/>
+    <limit lower="-1.9199" upper="1.9199" effort="1000.0" velocity="0.1"/>
+  </joint>
+  
+  <!-- Link 5-->
+  <link name="link_5">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="-1.57079632679 0 -1.57079632679" xyz="-0.86313 0.347386 -0.01926"/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/5_axis.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 6-->
+  <joint name="joint_6" type="revolute">
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.7"/>
+    <origin xyz="0 0 ${joint_offset_6}" rpy="${PI/2.0} 0 0"/>
+    <limit lower="-6.283185307180000123139507" upper="6.283185307180000123139507" effort="1000.0" velocity="0.1"/>
+  </joint>
+  
+  <!-- Link 6-->
+  <link name="link_6">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin rpy="0.0 -1.5041 0.0" xyz="0.83608 0.01926 -0.425 "/>
+      <geometry>
+        <mesh filename="package://er3_description/mesh/6_axis.dae"/>
+      </geometry>
+    </visual>
+    
+    <inertial>
+      <origin xyz="0 0 ${j2l_offset6}" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 7-->
+  <joint name="joint_7" type="fixed">
+    <parent link="link_6"/>
+    <child link="link_end"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  
+  <!-- Link end-->
+  <link name="link_end">
+    <collision>
+      <origin rpy="0.0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius = "0.0"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+</robot>
+

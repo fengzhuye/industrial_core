@@ -1,0 +1,10 @@
+<launch>
+  <node name="orocos" pkg="ocl" type="deployer-corba-gnulinux" launch-prefix="xterm -e" args=" $(find er3_moveit_config)/script/connect.ops -- -ORBInitRef NameService=corbaloc:iiop:10.10.30.103:2809/NameService ">
+  </node>
+  <node name="trajectory_bridge" pkg="trajectory_bridge" type="trajectory_bridge" output="screen">
+  	<remap from="follow_joint_trajectory" to="/er3/arm_controller/follow_joint_trajectory"/>
+  	<remap from="add_segment" to="er3/add_segment"/>
+  </node>
+
+</launch>
+

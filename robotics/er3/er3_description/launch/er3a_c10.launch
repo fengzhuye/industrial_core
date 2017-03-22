@@ -1,0 +1,9 @@
+<launch>
+  	<param name="robot_description"
+    		command="$(find xacro)/xacro '$(find er3a_c10)/urdf/er3a_c10.xacro'" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find er3a_c10)/launch/robot.rviz" required="true" />
+	<node name="orocos" pkg="ocl" type="deployer-corba-gnulinux" launch-prefix="xterm -e" args="/home/i5/ws/underlay/src/joints_state_bridge/start.ops -- -ORBInitRef NameService=corbaloc:iiop:10.10.60.192:2809/NameService ">
+	</node>
+</launch>
+

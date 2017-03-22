@@ -1,0 +1,32 @@
+#deployer-corba-gnulinux start.ops -- -ORBInitRef NameService=corbaloc:iiop:10.10.60.83:2809/NameService
+
+loadComponent("joints_scanner","CORBA")
+
+import("rtt_ros")
+
+
+ros.import("joints_state_proxy")
+ros.import ("rtt_roscomm")
+ros.import ("rtt_std_msgs")
+ros.import ("rtt_sensor_msgs")
+
+
+
+loadComponent("joints_state","JointsStateProxy")
+
+var ConnPolicy p
+p.data_size  = 1
+
+
+connect("joints_scanner.out_position","joints_state.in_pose",p)
+connect("joints_scanner.out_velocity","joints_state.in_vel",p)
+
+joints_state.setPeriod(0.05)
+
+
+stream("joints_state.out_joints_state", ros.topic("/joint_states"))
+
+joints_state.start
+
+
+

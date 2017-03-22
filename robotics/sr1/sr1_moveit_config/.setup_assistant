@@ -1,0 +1,8 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: sr1_description
+    relative_path: urdf/sr1.xacro
+  SRDF:
+    relative_path: config/sr1.srdf
+  CONFIG:
+    generated_timestamp: 1461901705
